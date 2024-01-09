@@ -1,0 +1,20 @@
+.tabloidWrapper{
+    display: flex;
+    color: rgb(0, 189, 236);
+    border: 2px solid rgb(0, 120, 150);
+    border-radius: 10px;
+    min-width: 320px;
+    min-height: 100px;
+    font-size: 34px;
+    text-align: center;
+    line-height: 90px;
+    justify-content: center;
+}
+
+
+.tabloidMaxCount{
+    color: rgb(255, 0, 0);
+    box-shadow: inset 0px 0px 16px rgba(255, 0, 0, 0.5);
+}
+
+

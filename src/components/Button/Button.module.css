@@ -1,0 +1,15 @@
+.button{
+    background: #282c34;
+    color: rgb(0, 189, 236);
+    border: 2px solid rgb(0, 120, 150);
+    border-radius: 10px;
+    min-width: 100px;
+    min-height: 50px;
+    margin: 6px;
+    font-size: 16px;
+}
+
+.buttonDisabled{
+    color: rgba(0, 189, 236, 0.432);
+    opacity: 0.5;
+}
