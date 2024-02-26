@@ -1,16 +1,17 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import './App.css';
 import { Tabloid } from './components/Tabloid/Tabloid';
 import { TabloidSetting } from './components/TabloidSetting/TabloidSetting';
+import { addCounterAC, errorCounterAC, resCounterAC, setCountMaxAC, setCountMinAC } from './state/counterReducer';
+
 
 
 
 function App() {
 
-  const [counter, setCounter] = useState(0)
-  const [counterMin, setCounterMin] = useState(0)
-  const [counterMax, setCounterMax] = useState(0)
-  const [error, setError] = useState(false)
+  let counterState = useSelector<any, any>(state => state.counter)
+  let dispatch = useDispatch()
 
   useEffect(() => {
     let valueMin = localStorage.getItem('min')
@@ -18,57 +19,61 @@ function App() {
 
     if (valueMin) {
       let newMin = JSON.parse(valueMin)
-      setCounterMin(newMin)
-      setCounter(newMin)
+      dispatch(setCountMinAC(newMin))
+      dispatch(resCounterAC())
     }
 
     if (valueMax) {
       let newMax = JSON.parse(valueMax)
-      setCounterMax(newMax)
+      dispatch(setCountMaxAC(newMax))
     }
 
   }, [])
 
   const countAdd = () => {
-    setCounter(counter + 1)
+    dispatch(addCounterAC())
   }
 
   const countReset = () => {
-    setCounter(counterMin)
+    dispatch(resCounterAC())
   }
 
   const onChangeMaxHandler = (e: ChangeEvent<HTMLInputElement>) => {
     const valueMax = +e.currentTarget.value
-    const searchErrorMax = valueMax < 0 || valueMax <= counterMin
-    setCounterMax(+e.currentTarget.value)
+    const searchErrorMax = valueMax < 0 || valueMax <= counterState.counterMin
+    dispatch(setCountMaxAC(+e.currentTarget.value))
     if(searchErrorMax){
-      setError(true)
+      // setError(true)
+      dispatch(errorCounterAC(true))
     } else {
-      setError(false)
+      // setError(false)
+      dispatch(errorCounterAC(false))
     }
   }
 
   const onChangeStartHandler = (e: ChangeEvent<HTMLInputElement>) => {
     const valueMin = +e.currentTarget.value
-    const searchErrorMin = valueMin < 0 || valueMin > counterMax
-    setCounterMin(+e.currentTarget.value)
+    const searchErrorMin = valueMin < 0 || valueMin > counterState.counterMax
+    dispatch(setCountMinAC(+e.currentTarget.value))
     if(searchErrorMin){
-      setError(true)
+      // setError(true)
+      dispatch(errorCounterAC(true))
     } else {
-      setError(false)
+      // setError(false)
+      dispatch(errorCounterAC(false))
     }
   }
 
   const setCount = () => {
-    if (counterMin) {
-      localStorage.setItem('min', JSON.stringify(counterMin))
-      setCounterMin(counterMin)
+    if (counterState.counterMin) {
+      localStorage.setItem('min', JSON.stringify(counterState.counterMin))
+      dispatch(setCountMinAC(counterState.counterMin))
     }
-    if (counterMax) {
-      localStorage.setItem('max', JSON.stringify(counterMax))
-      setCounterMax(counterMax)
+    if (counterState.counterMax) {
+      localStorage.setItem('max', JSON.stringify(counterState.counterMax))
+      dispatch(setCountMaxAC(counterState.counterMax))
     }
-    setCounter(counterMin)
+    dispatch(resCounterAC())
   }
 
   return (
@@ -76,9 +81,9 @@ function App() {
       <div className='wrapper'>
         <div className='border'>
           <TabloidSetting
-            counterMax={counterMax}
-            counterMin={counterMin}
-            error={error}
+            counterMax={counterState.counterMax}
+            counterMin={counterState.counterMin}
+            error={counterState.error}
             onChangeMaxHandler={onChangeMaxHandler}
             onChangeStartHandler={onChangeStartHandler}
             setCount={setCount}
@@ -86,10 +91,10 @@ function App() {
         </div>
         <div className='border'>
           <Tabloid
-            counter={counter}
-            counterMax={counterMax}
-            counterMin={counterMin}
-            error={error}
+            counter={counterState.counter}
+            counterMax={counterState.counterMax}
+            counterMin={counterState.counterMin}
+            error={counterState.error}
             countAdd={countAdd}
             countReset={countReset} />
         </div>
@@ -100,6 +105,3 @@ function App() {
 }
 
 export default App;
-
-
-
