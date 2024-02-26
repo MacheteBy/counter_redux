@@ -13,6 +13,8 @@ function App() {
   let counterState = useSelector<any, any>(state => state.counter)
   let dispatch = useDispatch()
 
+
+
   useEffect(() => {
     let valueMin = localStorage.getItem('min')
     let valueMax = localStorage.getItem('max')
@@ -31,6 +33,7 @@ function App() {
   }, [])
 
   const countAdd = () => {
+    dispatch(addCounterAC())
     dispatch(addCounterAC())
   }
 
