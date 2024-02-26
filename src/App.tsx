@@ -34,7 +34,6 @@ function App() {
 
   const countAdd = () => {
     dispatch(addCounterAC())
-    dispatch(addCounterAC())
   }
 
   const countReset = () => {
